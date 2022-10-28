@@ -60,6 +60,10 @@ function change(input,regex,msg) {
   input.oninput = (e) =>{
     e.preventDefault();
     InputValidate(input,regex,msg);
+    let Year = birthdate.value.toString().split("-")[0];
+    if(Year>2007 || Year < 1920) {
+      asginErrorOrValidity(birthdate.parentElement,false,"Vous devez avoir entre 15 et 102 ans pour vous inscrire", true,false);
+    }
   }
 
   submit.addEventListener('submit', (e)=>{
@@ -69,12 +73,9 @@ function change(input,regex,msg) {
 
   CGU.onchange = ()=>{
     if(CGU.checked === false) {
-      CGU.parentElement.setAttribute('data-error-visible', true);
-      CGU.parentElement.setAttribute('data-error', "Veuillez accepter les Conditions d'utilisation");
-      CGU.parentElement.setAttribute('data-valid',false);
+      asginErrorOrValidity(CGU,false,"Veuillez accepter les Conditions d'utilisation", true,false);
     }else {
-      CGU.parentElement.setAttribute('data-error-visible',false);
-      CGU.parentElement.setAttribute('data-valid',true);
+      asginErrorOrValidity(CGU,true,null, false,false);
     }
   }
 }
@@ -89,49 +90,37 @@ function checkValue() {
 }
 
 //function qui permet la verification des champs
-//a = Dom Element
-//b = regex
-// c = mesages
-function InputValidate(a, b ,c) {
-  let checkValidValue = b.test(a.value); // test de confirmitée des regex
+function InputValidate(elements, regex ,message) {
+  let checkValidValue = regex.test(elements.value); // test de confirmitée des regex
   //verifie si le champ est vide Ou non
-  if(a.value.length <=0) {
-    a.parentElement.setAttribute('data-error-visible',true);
-    a.parentElement.setAttribute('data-valid-visible',false);
-    a.parentElement.setAttribute('data-error','Veuillez remplir ces champs!');
-    a.parentElement.setAttribute('data-valid',false);
+  if(elements.value.length <=0) {
+    asginErrorOrValidity(elements.parentElement,false,message, true,false);
     return false;
   }
   // realise le test est assigne un message d'erreur ou de validation
   if (checkValidValue) {
-
-    a.parentElement.setAttribute('data-error-visible',false);
-    a.parentElement.setAttribute('data-valid-visible',true);
-    a.parentElement.setAttribute('data-valid',true);
+    asginErrorOrValidity(elements.parentElement,true,null, false,true);
   } else {
-    a.parentElement.setAttribute('data-error-visible',true);
-    a.parentElement.setAttribute('data-error',c);
-    a.parentElement.setAttribute('data-valid',false);
+    asginErrorOrValidity(elements.parentElement,false,message, true,false);
   }
 }
+
 //fonction submit qui envois les donner du formulaire
 function validate() {
   // boucle qui gere le choix des villes
   locationValue.forEach((el)=>{
     let verify = document.querySelector(`#${el.id}`);
     verify.onchange = ()=>{
-      locationDiv.setAttribute('data-error-visible',false);
-      locationDiv.setAttribute('data-valid',true);
+      asginErrorOrValidity(locationDiv,true,null, false,false);
     }
     return verify.checked ? city = verify : city
   })
+
+
   if(city == ""){
-    locationDiv.setAttribute('data-error-visible',true);
-    locationDiv.setAttribute('data-error',"Veuillez choisir une ville");
-    locationDiv.setAttribute('data-valid',false);
+    asginErrorOrValidity(locationDiv,false,"Veuillez choisir une ville", true,false);
   }else {
-    locationDiv.setAttribute('data-error-visible',false);
-    locationDiv.setAttribute('data-valid',true);
+    asginErrorOrValidity(locationDiv,true,null,false,false);
   }
   //condition qui verifie que tous les champs sont conforme
   if( checkValidity(firstname.parentElement) === "true" &&
@@ -164,14 +153,19 @@ function validate() {
     console.log('erreur')
     return false
   }
-
-
 }
 
 //fonction qui verifie la confiormité des champs return True ou false
-function checkValidity(a) {
-  if( a.getAttribute('data-valid')=== null) return false;
-  return a.getAttribute('data-valid');
+function checkValidity(elements) {
+  if( elements.getAttribute('data-valid')=== null) return false;
+  return elements.getAttribute('data-valid');
+}
+
+function asginErrorOrValidity(Elements,dataValid,message,errVisible,validVisible) {
+  Elements.setAttribute('data-error-visible',errVisible);
+  Elements.setAttribute('data-valid-visible',validVisible);
+  Elements.setAttribute('data-error',message);
+  Elements.setAttribute('data-valid',dataValid);
 }
 
 //ouvre la modale de remerciement
