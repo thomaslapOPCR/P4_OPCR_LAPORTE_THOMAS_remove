@@ -73,9 +73,9 @@ function change(input,regex,msg) {
 
   CGU.onchange = ()=>{
     if(CGU.checked === false) {
-      asginErrorOrValidity(CGU,false,"Veuillez accepter les Conditions d'utilisation", true,false);
+      asginErrorOrValidity(CGU.parentElement,false,"Veuillez accepter les Conditions d'utilisation", true,false);
     }else {
-      asginErrorOrValidity(CGU,true,null, false,false);
+      asginErrorOrValidity(CGU.parentElement,true,null, false,false);
     }
   }
 }
