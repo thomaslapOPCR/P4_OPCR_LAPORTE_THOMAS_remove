@@ -75,7 +75,7 @@ function change(input,regex,msg) {
     if(CGU.checked === false) {
       asginErrorOrValidity(CGU.parentElement,false,"Veuillez accepter les Conditions d'utilisation", true,false);
     }else {
-      asginErrorOrValidity(CGU.parentElement,true,null, false,false);
+      asginErrorOrValidity(CGU.parentElement,true,"", false,false);
     }
   }
 }
@@ -99,7 +99,7 @@ function InputValidate(elements, regex ,message) {
   }
   // realise le test est assigne un message d'erreur ou de validation
   if (checkValidValue) {
-    asginErrorOrValidity(elements.parentElement,true,null, false,true);
+    asginErrorOrValidity(elements.parentElement,true,"", false,true);
   } else {
     asginErrorOrValidity(elements.parentElement,false,message, true,false);
   }
@@ -111,7 +111,7 @@ function validate() {
   locationValue.forEach((el)=>{
     let verify = document.querySelector(`#${el.id}`);
     verify.onchange = ()=>{
-      asginErrorOrValidity(locationDiv,true,null, false,false);
+      asginErrorOrValidity(locationDiv,true,"", false,false);
     }
     return verify.checked ? city = verify : city
   })
@@ -120,7 +120,7 @@ function validate() {
   if(city == ""){
     asginErrorOrValidity(locationDiv,false,"Veuillez choisir une ville", true,false);
   }else {
-    asginErrorOrValidity(locationDiv,true,null,false,false);
+    asginErrorOrValidity(locationDiv,true,"",false,false);
   }
   //condition qui verifie que tous les champs sont conforme
   if( checkValidity(firstname.parentElement) === "true" &&
